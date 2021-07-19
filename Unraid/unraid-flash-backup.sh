@@ -36,7 +36,7 @@ backupzip=$backuppath/flash-backup--$sn--$unraidversion--$starttime.zip
 mkdir $backuppath
 
 #--Creating Zip -- Note: you can change the backup parth to /boot/config if wanted
-zip -r $backupzip /boot
+zip -r $backupzip /boot/config
 
 #--Backing up Folder to rclone target
-rclone copy -P /mnt/user/Backup-Unraid/ remote:/Unraid/$sn/Flash/$(date +%Y-%m)
+rclone copy -P --fast-list --tpslimit 4 --drive-chunk-size 256M --ignore-existing $backuppath remote:/Unraid/$sn/Flash/$(date +%Y-%m)
