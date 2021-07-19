@@ -21,12 +21,13 @@
 #   3. Unzip must be installed
 #
 
-sn             = $(hostname)
-unraidversion  = $(grep "emhttpd: Unraid(tm) System Management Utility version " /var/log/syslog | cut -c87-)
-starttime      = $(date +%Y%m%d-%H%M%S)
-backuppath     = /mnt/user/Backup-Unraid/$(date +%Y-%m)
-backupzip      = $backuppath/flash-backup--$sn--$unraidversion--$starttime.zip
-remotepath     = "remote:/Unraid/$sn/Flash/$(date +%Y-%m)"
+unraidHostname  = $(hostname)
+unraidVersion   = $(grep "emhttpd: Unraid(tm) System Management Utility version " /var/log/syslog | cut -c87-)
+startTime       = $(date +%Y%m%d-%H%M%S)
+monthDate       = $(date +%Y-%m)
+backuppath      = /mnt/user/Backup-Unraid/$monthDate
+backupzip       = $backuppath/flash-backup--$unraidHostname--$unraidVersion--$startTime.zip
+remotepath      = "remote:/Unraid/$unraidHostname/Flash/$monthDate"
 
 #--Block Variable testing, remove the # before each line to enable
 #echo $sn
