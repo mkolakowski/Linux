@@ -7,9 +7,10 @@
 # .VARIABLES
 #   backuppath     = Path to folder that will hold backups
 #   backupzip      = Name of backup Zip
-#   sn             =  Is the hostname of the Unraid Server
+#   sn             = Is the hostname of the Unraid Server
 #   starttime      = Date+Time Script Started, eg: 20190430-145150
-#   unraidversion  =  Version number of server
+#   unraidversion  = Version number of server
+#   remotepath     = Contains path of rclone remote storage path
 #
 # .EXAMPLES
 #   Run script as is after validating data in above variables is correct
@@ -20,11 +21,12 @@
 #   3. Unzip must be installed
 #
 
-sn=$(hostname)
-unraidversion=$(grep "emhttpd: Unraid(tm) System Management Utility version " /var/log/syslog | cut -c87-)
-starttime=$(date +%Y%m%d-%H%M%S)
-backuppath=/mnt/user/Backup-Unraid/$(date +%Y-%m)
-backupzip=$backuppath/flash-backup--$sn--$unraidversion--$starttime.zip
+sn             = $(hostname)
+unraidversion  = $(grep "emhttpd: Unraid(tm) System Management Utility version " /var/log/syslog | cut -c87-)
+starttime      = $(date +%Y%m%d-%H%M%S)
+backuppath     = /mnt/user/Backup-Unraid/$(date +%Y-%m)
+backupzip      = $backuppath/flash-backup--$sn--$unraidversion--$starttime.zip
+remotepath     = "remote:/Unraid/$sn/Flash/$(date +%Y-%m)"
 
 #--Block Variable testing, remove the # before each line to enable
 #echo $sn
@@ -39,4 +41,4 @@ mkdir $backuppath
 zip -r $backupzip /boot/config
 
 #--Backing up Folder to rclone target
-rclone copy -P --fast-list --tpslimit 4 --drive-chunk-size 256M --ignore-existing $backuppath remote:/Unraid/$sn/Flash/$(date +%Y-%m)
+rclone copy -P --fast-list --tpslimit 4 --drive-chunk-size 256M --ignore-existing  $backuppath $remotepath
