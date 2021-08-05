@@ -23,39 +23,39 @@
 #   3. Unzip must be installed
 
 #--Variable Generation
-  unraidHostname  = $(hostname)
-  unraidVersion   = $(grep "emhttpd: Unraid(tm) System Management Utility version " /var/log/syslog | cut -c87-)
-  startTime       = $(date +%Y%m%d-%H%M%S)
-  monthDate       = $(date +%Y-%m)
-  backuppath      = /mnt/user/Backup-Unraid/$monthDate
-  backupzip       = $backuppath/flash-backup--$unraidHostname--$unraidVersion--$startTime.zip
-  remotepath      = "remote:/Unraid/$unraidHostname/Flash/$monthDate"
-  logfolder       = /mnt/user/Logs/FlashBackup
-  logfilepath     = $logfolder/log-$starttime.txt
+  unraidHostname=$(hostname)
+  unraidVersion=$(grep "emhttpd: Unraid(tm) System Management Utility version " /var/log/syslog | cut -c87-)
+  startTime=$(date +%Y%m%d-%H%M%S)
+  monthDate=$(date +%Y-%m)
+  backuppath=/mnt/user/Backup-Unraid/$monthDate
+  backupzip=$backuppath/flash-backup--$unraidHostname--$unraidVersion--$startTime.zip
+  remotepath="remote:/Unraid/$unraidHostname/Flash/$monthDate"
+  logfolder=/mnt/user/Logs/FlashBackup
+  logfilepath=$logfolder/log-$starttime.txt
 
 #--Creating Directorys needed
   mkdir $logfolder
   mkdir $backuppath
 
 #--Creating and assigning permissions to log file
-  touch $log_file
-  chmod u+x $log_file
+  touch $logfilepath
+  chmod u+x $logfilepath
 
 #--Block Variable testing, remove the # before each line to enable
-  echo $sn &>>         $log_file
-  echo $unraidversion  &>> $log_file
-  echo $backuppath     &>> $log_file
-  echo $backupzip      &>> $log_file
-  echo --------------- &>> $log_file
+  echo $sn &>>         $logfilepath
+  echo $unraidversion  &>> $logfilepath
+  echo $backuppath     &>> $logfilepath
+  echo $backupzip      &>> $logfilepath
+  echo --------------- &>> $logfilepath
 
 #--Creating Zip -- Note: you can change the backup parth to /boot/config if wanted
-  zip -r $backupzip /boot/config &>> $log_file
+  zip -r $backupzip /boot/config &>> $logfilepath
 
 #--Backing up Folder to rclone target
-  rclone copy -P --fast-list --tpslimit 4 --drive-chunk-size 256M --ignore-existing  $backuppath $remotepath &>> $log_file
+  rclone copy -P --fast-list --tpslimit 4 --drive-chunk-size 256M --ignore-existing  $backuppath $remotepath &>> $logfilepath
 
 #--Logging finish time
-  endTime = $(date +%Y%m%d-%H%M%S)
-  echo --------------- &>> $log_file
-  echo $endTime        &>> $log_file
-  echo --------------- &>> $log_file
+  endTime=$(date +%Y%m%d-%H%M%S)
+  echo --------------- &>> $logfilepath
+  echo $endTime        &>> $logfilepath
+  echo --------------- &>> $logfilepath
