@@ -31,7 +31,7 @@
   backupzip=$backuppath/flash-backup--$unraidHostname--$unraidVersion--$startTime.zip
   remotepath="remote:/Unraid/$unraidHostname/Flash/$monthDate"
   logfolder=/mnt/user/Logs/FlashBackup
-  logfilepath=$logfolder/log-$starttime.txt
+  logfilepath=$logfolder/log-$startTime.txt
 
 #--Creating Directorys needed
   mkdir $logfolder
